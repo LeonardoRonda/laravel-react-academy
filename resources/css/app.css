@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    @apply bg-slate-950 text-slate-100 min-h-screen selection:bg-indigo-500/30;
+}
+
+@layer components {
+    .panel {
+        @apply rounded-2xl border border-white/10 bg-slate-900 p-6 shadow-xl;
+    }
+
+    .panel-muted {
+        @apply rounded-xl border border-white/5 bg-slate-800/50;
+    }
+
+    .heading-page {
+        @apply text-3xl font-bold text-slate-100;
+    }
+
+    .heading-section {
+        @apply text-xl font-semibold text-slate-100;
+    }
+
+    .text-muted {
+        @apply text-slate-400;
+    }
+
+    .input-dark {
+        @apply mt-1 block w-full rounded-xl border-white/10 bg-slate-800 text-slate-100 placeholder-slate-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500;
+    }
+
+    .btn-primary {
+        @apply inline-flex items-center justify-center rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50;
+    }
+
+    .btn-secondary {
+        @apply inline-flex items-center justify-center rounded-xl border border-white/10 bg-slate-800 px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-slate-700;
+    }
+
+    .link-accent {
+        @apply font-medium text-indigo-400 transition hover:text-indigo-300;
+    }
+
+    .table-dark {
+        @apply min-w-full divide-y divide-white/10;
+    }
+
+    .table-dark thead {
+        @apply bg-slate-800/80;
+    }
+
+    .table-dark th {
+        @apply px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-400;
+    }
+
+    .table-dark tbody {
+        @apply divide-y divide-white/10 bg-slate-900;
+    }
+
+    .table-dark td {
+        @apply px-6 py-4 text-sm text-slate-200;
+    }
+}
