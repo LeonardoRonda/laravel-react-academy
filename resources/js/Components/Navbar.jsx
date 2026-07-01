@@ -1,36 +1,38 @@
 import { Link, usePage } from '@inertiajs/react';
+import { useState } from 'react';
 
 export default function Navbar() {
     const { auth, cart_count } = usePage().props;
     const user = auth?.user;
     const isAdmin = user?.is_admin;
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    const closeMobileMenu = () => setMobileMenuOpen(false);
 
     return (
-        // Nota el cambio: bg-slate-950/50 y backdrop-blur-2xl
         <nav className="sticky top-0 z-50 w-full bg-slate-950/50 backdrop-blur-2xl border-b border-white/10">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
+                    {/* Logo */}
+                    <Link href="/" className="text-white font-bold text-xl tracking-tight">Academia</Link>
 
-                    <div className="flex items-center space-x-8">
-                        <Link href="/" className="text-white font-bold text-xl tracking-tight">Academia</Link>
-
-                        <div className="hidden md:flex space-x-6">
-                            <Link href={route('home')} className="text-slate-400 hover:text-white transition">Inicio</Link>
-                            <Link href={route('about')} className="text-slate-400 hover:text-white transition">Nosotros</Link>
-                            <Link href={route('products.courses')} className="text-slate-400 hover:text-white transition">Cursos</Link>
-                            <Link href={route('products.books')} className="text-slate-400 hover:text-white transition">Libros</Link>
-                            <Link href={route('blog')} className="text-slate-400 hover:text-white transition">Blog</Link>
-                        </div>
+                    {/* Desktop Menu */}
+                    <div className="hidden md:flex items-center space-x-6">
+                        <Link href={route('home')} className="text-slate-400 hover:text-white transition">Inicio</Link>
+                        <Link href={route('about')} className="text-slate-400 hover:text-white transition">Nosotros</Link>
+                        <Link href={route('products.courses')} className="text-slate-400 hover:text-white transition">Cursos</Link>
+                        <Link href={route('products.books')} className="text-slate-400 hover:text-white transition">Libros</Link>
+                        <Link href={route('blog')} className="text-slate-400 hover:text-white transition">Blog</Link>
                     </div>
 
+                    {/* Right Actions */}
                     <div className="flex items-center space-x-3">
                         {user ? (
                             <>
-                                {/* Admin link — solo visible para administradores */}
                                 {isAdmin && (
                                     <Link
                                         href={route('products.admin')}
-                                        className="flex items-center gap-1.5 text-amber-400 hover:text-amber-300 transition text-sm font-medium"
+                                        className="hidden sm:flex items-center gap-1.5 text-amber-400 hover:text-amber-300 transition text-sm font-medium"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                             <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
@@ -40,7 +42,6 @@ export default function Navbar() {
                                     </Link>
                                 )}
 
-                                {/* Carrito con badge contador */}
                                 {!isAdmin && (
                                     <Link
                                         href={route('cart')}
@@ -59,7 +60,6 @@ export default function Navbar() {
                                     </Link>
                                 )}
 
-                                {/* Perfil */}
                                 <Link href={route('profile.index')} className="text-slate-400 hover:text-white transition p-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -71,24 +71,124 @@ export default function Navbar() {
                                     href={route('logout')}
                                     method="post"
                                     as="button"
-                                    className="bg-slate-800 text-white px-4 py-2 rounded-full hover:bg-slate-700 transition text-sm"
+                                    className="hidden sm:block bg-slate-800 text-white px-4 py-2 rounded-full hover:bg-slate-700 transition text-sm"
                                 >
                                     Salir
                                 </Link>
                             </>
                         ) : (
                             <>
-                                <Link href={route('login')} className="text-slate-400 hover:text-white transition">Iniciar sesión</Link>
+                                <Link href={route('login')} className="hidden sm:block text-slate-400 hover:text-white transition">Iniciar sesión</Link>
                                 <Link
                                     href={route('register')}
-                                    className="bg-indigo-600 text-white px-5 py-2 rounded-full hover:bg-indigo-500 transition font-medium text-sm"
+                                    className="hidden sm:block bg-indigo-600 text-white px-5 py-2 rounded-full hover:bg-indigo-500 transition font-medium text-sm"
+                                >
+                                    Registrarse
+                                </Link>
+                            </>
+                        )}
+
+                        {/* Hamburger Menu Button */}
+                        <button
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            className="md:hidden p-2 text-slate-400 hover:text-white transition"
+                        >
+                            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                {/* Mobile Menu */}
+                {mobileMenuOpen && (
+                    <div className="md:hidden border-t border-white/10 py-4 space-y-3">
+                        <Link
+                            href={route('home')}
+                            className="block text-slate-400 hover:text-white transition py-2"
+                            onClick={closeMobileMenu}
+                        >
+                            Inicio
+                        </Link>
+                        <Link
+                            href={route('about')}
+                            className="block text-slate-400 hover:text-white transition py-2"
+                            onClick={closeMobileMenu}
+                        >
+                            Nosotros
+                        </Link>
+                        <Link
+                            href={route('products.courses')}
+                            className="block text-slate-400 hover:text-white transition py-2"
+                            onClick={closeMobileMenu}
+                        >
+                            Cursos
+                        </Link>
+                        <Link
+                            href={route('products.books')}
+                            className="block text-slate-400 hover:text-white transition py-2"
+                            onClick={closeMobileMenu}
+                        >
+                            Libros
+                        </Link>
+                        <Link
+                            href={route('blog')}
+                            className="block text-slate-400 hover:text-white transition py-2"
+                            onClick={closeMobileMenu}
+                        >
+                            Blog
+                        </Link>
+
+                        {user && (
+                            <>
+                                {isAdmin && (
+                                    <Link
+                                        href={route('products.admin')}
+                                        className="block text-amber-400 hover:text-amber-300 transition py-2 font-medium"
+                                        onClick={closeMobileMenu}
+                                    >
+                                        Admin
+                                    </Link>
+                                )}
+                                <Link
+                                    href={route('profile.index')}
+                                    className="block text-slate-400 hover:text-white transition py-2"
+                                    onClick={closeMobileMenu}
+                                >
+                                    Mi perfil
+                                </Link>
+                                <Link
+                                    href={route('logout')}
+                                    method="post"
+                                    as="button"
+                                    className="block w-full text-left bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-700 transition text-sm"
+                                    onClick={closeMobileMenu}
+                                >
+                                    Salir
+                                </Link>
+                            </>
+                        )}
+
+                        {!user && (
+                            <>
+                                <Link
+                                    href={route('login')}
+                                    className="block text-slate-400 hover:text-white transition py-2"
+                                    onClick={closeMobileMenu}
+                                >
+                                    Iniciar sesión
+                                </Link>
+                                <Link
+                                    href={route('register')}
+                                    className="block w-full text-center bg-indigo-600 text-white px-5 py-2 rounded hover:bg-indigo-500 transition font-medium text-sm"
+                                    onClick={closeMobileMenu}
                                 >
                                     Registrarse
                                 </Link>
                             </>
                         )}
                     </div>
-                </div>
+                )}
             </div>
         </nav>
     );
