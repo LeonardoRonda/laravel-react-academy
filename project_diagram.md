@@ -108,7 +108,6 @@ erDiagram
     }
 
     payments {
-        int id PK
         int order_id FK
         string transaction_id
         string payment_status
@@ -126,7 +125,7 @@ erDiagram
     users ||--o{ favorites : "marca"
     categories ||--o{ products : "contiene"
     orders ||--o{ order_items : "incluye"
-    orders ||--o| payments : "genera"
+    orders ||--o{ payments : "tiene"
     products ||--o{ order_items : "aparece en"
     products ||--o{ cart_items : "agregado a"
     products ||--o{ favorites : "marcado como"

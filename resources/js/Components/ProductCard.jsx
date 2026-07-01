@@ -89,13 +89,15 @@ export default function ProductCard({ product }) {
                         >
                             Ver
                         </Link>
-                        <button
-                            type="button"
-                            onClick={addToCart}
-                            className="px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-500 transition shadow-lg shadow-indigo-500/20"
-                        >
-                            Añadir
-                        </button>
+                        {!user?.is_admin && (
+                            <button
+                                type="button"
+                                onClick={addToCart}
+                                className="px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-500 transition shadow-lg shadow-indigo-500/20"
+                            >
+                                Añadir
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>

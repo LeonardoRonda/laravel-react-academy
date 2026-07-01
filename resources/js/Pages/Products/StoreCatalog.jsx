@@ -1,7 +1,7 @@
 import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { usePage } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import ProductCard from '@/Components/ProductCard';
 
 export default function Index({ products, title }) {
@@ -10,10 +10,12 @@ export default function Index({ products, title }) {
     const resourceType = title === 'Cursos' ? 'course' : 'book';
 
     const content = (
-        <div className="py-12">
+        <>
+            <Head title={title} />
+            <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <header className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        <h1 className="heading-page text-2xl">{title}</h1>
+                        <h1 className="heading-page text-2xl">Conoce nuestros {title}</h1>
 
                         {user?.is_admin && (
                             <a
@@ -31,7 +33,8 @@ export default function Index({ products, title }) {
                         ))}
                     </div>
                 </div>
-        </div>
+            </div>
+        </>
     );
 
     if (user) {

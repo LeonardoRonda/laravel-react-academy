@@ -6,8 +6,10 @@ export default function About() {
     const user = usePage().props.auth.user;
 
     const content = (
-        <div className="min-h-screen bg-slate-950 py-16">
-            <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <>
+            <Head title="Nosotros" />
+            <div className="min-h-screen bg-slate-950 py-16">
+                <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
                 {/* Título de impacto */}
                 <div className="mb-12 border-l-4 border-indigo-500 pl-6">
                     <h1 className="text-4xl font-extrabold text-white sm:text-5xl">Sobre Nosotros</h1>
@@ -63,6 +65,7 @@ export default function About() {
                 </div>
             </div>
         </div>
+        </>
     );
 
     return user ? (

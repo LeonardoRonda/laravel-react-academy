@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\PhotoController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -24,6 +25,10 @@ Route::get('/cursos', [ProductController::class, 'indexCourses'])->name('product
 Route::get('/libros', [ProductController::class, 'indexBooks'])->name('products.books');
 Route::get('/productos/{product:slug}', [ProductController::class, 'ProductDetail'])->name('products.show');
 
+// CRUD Fotos
+Route::get('/fotos', [PhotoController::class, 'index'])->name('photos.index');
+Route::post('/fotos', [PhotoController::class, 'store'])->name('photos.store');
+Route::delete('/fotos/{photo}', [PhotoController::class, 'destroy'])->name('photos.destroy');
 /*
 |--------------------------------------------------------------------------
 | Usuario autenticado

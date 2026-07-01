@@ -1,8 +1,18 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import DeleteUserForm from './Partials/DeleteUserForm';
+import AdminIndex from './AdminIndex';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 
 export default function Index({ purchases = [], favorites = [] }) {
-    const user = usePage().props.auth.user;
+    const pageProps = usePage().props;
+    const authUser = pageProps.auth?.user;
+    const user = pageProps.user ?? authUser;
+    const isAdmin = Boolean(user?.is_admin ?? authUser?.is_admin);
+    const showUserPanels = !isAdmin;
+
+    if (isAdmin) {
+        return <AdminIndex />;
+    }
 
     const removeFavorite = (productId) => {
         router.post(route('favorites.store'), { product_id: productId }, { preserveScroll: true });
@@ -14,9 +24,20 @@ export default function Index({ purchases = [], favorites = [] }) {
 
             <div className="grid gap-8 lg:grid-cols-[360px_1fr]">
                 <aside className="panel h-fit">
-                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-indigo-500/20 text-2xl font-bold text-indigo-300">
-                        {user.name.charAt(0).toUpperCase()}
+                    <div className="relative h-20 w-20 overflow-hidden rounded-full bg-indigo-500/20">
+                        {user.profile_photo_url ? (
+                            <img
+                                src={user.profile_photo_url}
+                                alt="Foto de perfil"
+                                className="h-full w-full object-cover"
+                            />
+                        ) : (
+                            <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-indigo-300">
+                                {user.name.charAt(0).toUpperCase()}
+                            </div>
+                        )}
                     </div>
+
                     <h1 className="mt-4 text-2xl font-bold text-slate-100">{user.name}</h1>
                     <p className="text-muted mt-1 text-sm">{user.email}</p>
 
@@ -29,24 +50,32 @@ export default function Index({ purchases = [], favorites = [] }) {
                                     : 'No disponible'}
                             </dd>
                         </div>
-                        <div className="border-t border-white/10 pt-4">
-                            <dt className="font-medium text-slate-400">Compras registradas</dt>
-                            <dd className="mt-1 text-slate-100">{purchases.length}</dd>
-                        </div>
-                        <div className="border-t border-white/10 pt-4">
-                            <dt className="font-medium text-slate-400">Favoritos</dt>
-                            <dd className="mt-1 text-slate-100">{favorites.length}</dd>
-                        </div>
+                        {showUserPanels && (
+                            <>
+                                <div className="border-t border-white/10 pt-4">
+                                    <dt className="font-medium text-slate-400">Compras registradas</dt>
+                                    <dd className="mt-1 text-slate-100">{purchases.length}</dd>
+                                </div>
+                                <div className="border-t border-white/10 pt-4">
+                                    <dt className="font-medium text-slate-400">Favoritos</dt>
+                                    <dd className="mt-1 text-slate-100">{favorites.length}</dd>
+                                </div>
+                            </>
+                        )}
                     </dl>
 
                     <Link href={route('profile.edit')} className="btn-primary mt-6 block text-center">
                         Editar perfil
                     </Link>
+
+                    <DeleteUserForm className="mt-6" />
                 </aside>
 
                 <div className="space-y-8">
-                    {/* ─── Sección Favoritos ─── */}
-                    <section className="panel">
+                    {showUserPanels && (
+                        <>
+                            {/* ─── Sección Favoritos ─── */}
+                            <section className="panel">
                         <div className="mb-6 flex items-center justify-between">
                             <h2 className="heading-section text-2xl flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-400" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="0">
@@ -134,17 +163,21 @@ export default function Index({ purchases = [], favorites = [] }) {
                             </div>
                         )}
                     </section>
+                        </>
+                    )}
 
-                    {/* ─── Sección Historial de Compras ─── */}
-                    <section className="panel">
-                        <div className="mb-6 flex items-center justify-between">
-                            <h2 className="heading-section text-2xl">Historial de compras</h2>
-                            <Link href={route('cart')} className="link-accent text-sm">
-                                Ir al carrito
-                            </Link>
-                        </div>
+                    {showUserPanels && (
+                        <>
+                            {/* ─── Sección Historial de Compras ─── */}
+                            <section className="panel">
+                                <div className="mb-6 flex items-center justify-between">
+                                    <h2 className="heading-section text-2xl">Historial de compras</h2>
+                                    <Link href={route('cart')} className="link-accent text-sm">
+                                        Ir al carrito
+                                    </Link>
+                                </div>
 
-                        {purchases.length ? (
+                                {purchases.length ? (
                             <div className="space-y-4">
                                 {purchases.map((order) => (
                                     <article
@@ -205,6 +238,8 @@ export default function Index({ purchases = [], favorites = [] }) {
                             </div>
                         )}
                     </section>
+                        </>
+                    )}
                 </div>
             </div>
         </AuthenticatedLayout>

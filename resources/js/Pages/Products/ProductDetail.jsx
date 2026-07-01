@@ -80,7 +80,7 @@ export default function Show({ product }) {
                                 </div>
                             </div>
 
-                            {user ? (
+                            {user && !user.is_admin ? (
                                 <form onSubmit={addToCart} className="mt-6">
                                     <button
                                         type="submit"
@@ -90,6 +90,10 @@ export default function Show({ product }) {
                                         Añadir al carrito
                                     </button>
                                 </form>
+                            ) : user ? (
+                                <div className="mt-6 rounded-xl border border-yellow-500/20 bg-yellow-500/5 p-4 text-sm text-yellow-300">
+                                    Las compras no están disponibles para administradores.
+                                </div>
                             ) : (
                                 <Link
                                     href={route('login')}
